@@ -1,4 +1,5 @@
 import requests
+import time
 import re
 
 
@@ -6,6 +7,8 @@ class InstalingAPI:
     def __init__(self):
         # Simulate a real web browser
         self.USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"
+
+        self.VERSION_STRING = "C65E24B29F60B1231EC23D979C9707D2"
 
         # Initialize a requests session
         self.req_ses = self.__initialize_requests_session()
@@ -23,6 +26,36 @@ class InstalingAPI:
             "\/ling2\/html_app\/app.php\?child_id=\d\d\d\d\d\d\d", self.student_page.text)
         self.instaling_id = self.instaling_id[0].strip(
             "/ling2/html_app/app.php?child_id=")
+
+    def generate_next_word(self):
+        generate_word_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/generate_next_word.php", data={
+            "child_id": self.instaling_id,
+            "date": round(time.time()) * 1000
+        }).json()
+
+        word_id = generate_word_json["id"]
+        usage_example = generate_word_json["usage_example"]
+        polish_word = generate_word_json["translations"]
+        has_audio = generate_word_json["has_audio"]
+
+        return {"word_id": word_id, "usage_example": usage_example, "polish_word": polish_word, "has_audio": has_audio}
+
+    def submit_answer(self, word_id, answer):
+        answer_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/save_answer.php/", data={
+            "child_id": self.instaling_id,
+            "word_id": word_id,
+            "answer": answer,
+            "version": self.VERSION_STRING
+        }).json()
+
+        english_word = answer_json["word"]
+
+        return {"english_word": english_word}
+
+    def reveal_answer(self, word_id):
+        # word_path = self.req_ses.get(f"https://instaling.pl/ling2/server/actions/getAudioUrl.php?id={word_id}").json()
+        # revealed_answer = re.findall() # TODO: ADD REGEX
+        print("reveal_answer() Incomplete!!!!!")
 
     # Initialize requests session
     def __initialize_requests_session(self):
