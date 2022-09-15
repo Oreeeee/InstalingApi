@@ -1,17 +1,20 @@
+from .instaling_exceptions import *
 import requests
 import time
 import re
 
 
 class InstalingAPI:
-    def __init__(self):
-        # Simulate a real web browser
+    def __init__(self, username, password):
         self.USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"
-
+        # TODO: Update this string automatically
         self.VERSION_STRING = "C65E24B29F60B1231EC23D979C9707D2"
 
         # Initialize a requests session
         self.req_ses = self.__initialize_requests_session()
+
+        # Log in
+        self.log_in(username, password)
 
     def log_in(self, username, password):
         self.student_page = self.req_ses.post("https://instaling.pl/teacher.php?page=teacherActions/", data={
@@ -24,8 +27,20 @@ class InstalingAPI:
         # Get user ID
         self.instaling_id = re.findall(
             "\/ling2\/html_app\/app.php\?child_id=\d\d\d\d\d\d\d", self.student_page.text)
-        self.instaling_id = self.instaling_id[0].strip(
-            "/ling2/html_app/app.php?child_id=")
+
+        try:
+            self.instaling_id = self.instaling_id[0].strip(
+                "/ling2/html_app/app.php?child_id=")
+        except IndexError:
+            raise WrongPasswordException
+
+    def is_session_new(self):
+        return self.req_ses.post("https://instaling.pl/ling2/server/actions/init_session.php", data={
+            "child_id": self.instaling_id,
+            "repeat": "",
+            "start": "",
+            "end": ""
+        }).json()["is_new"]
 
     def generate_next_word(self):
         generate_word_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/generate_next_word.php", data={
@@ -33,12 +48,15 @@ class InstalingAPI:
             "date": round(time.time()) * 1000
         }).json()
 
-        word_id = generate_word_json["id"]
-        usage_example = generate_word_json["usage_example"]
-        polish_word = generate_word_json["translations"]
-        has_audio = generate_word_json["has_audio"]
+        try:
+            word_id = generate_word_json["id"]
+            usage_example = generate_word_json["usage_example"]
+            polish_word = generate_word_json["translations"]
+            has_audio = generate_word_json["has_audio"]
 
-        return {"word_id": word_id, "usage_example": usage_example, "polish_word": polish_word, "has_audio": has_audio}
+            return {"word_id": word_id, "usage_example": usage_example, "polish_word": polish_word, "has_audio": has_audio}
+        except KeyError:
+            raise SessionCompleteException
 
     def submit_answer(self, word_id, answer):
         answer_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/save_answer.php/", data={
@@ -62,6 +80,3 @@ class InstalingAPI:
         req_ses = requests.Session()
         req_ses.headers["User-Agent"] = self.USER_AGENT
         return req_ses
-
-    def __debug_request(self):
-        print(self.req_ses.get("https://ifconfig.me/").text)
