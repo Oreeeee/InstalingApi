@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="instalingapi",
-    version="1.0",
+    version="1.1-fix01",
     description="Instaling API written in Python.",
     license="Unlicense",
     author="Oreeeee",
