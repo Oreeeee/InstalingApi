@@ -5,7 +5,7 @@ import re
 
 
 class InstalingAPI:
-    def __init__(self, username, password):
+    def __init__(self):
         self.USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"
         # TODO: Update this string automatically
         self.VERSION_STRING = "C65E24B29F60B1231EC23D979C9707D2"
