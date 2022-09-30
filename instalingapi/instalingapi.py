@@ -13,9 +13,6 @@ class InstalingAPI:
         # Initialize a requests session
         self.req_ses = self.__initialize_requests_session()
 
-        # Log in
-        self.log_in(username, password)
-
     def log_in(self, username, password):
         self.student_page = self.req_ses.post("https://instaling.pl/teacher.php?page=teacherActions/", data={
             "action": "login",
