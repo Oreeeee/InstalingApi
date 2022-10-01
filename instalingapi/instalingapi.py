@@ -30,6 +30,10 @@ class InstalingAPI:
                 "/ling2/html_app/app.php?child_id=")
         except IndexError:
             raise WrongPasswordException
+        finally:
+            # Set username and password as attributes
+            self.username = username
+            self.password = password
 
     def is_session_new(self):
         return self.req_ses.post("https://instaling.pl/ling2/server/actions/init_session.php", data={
