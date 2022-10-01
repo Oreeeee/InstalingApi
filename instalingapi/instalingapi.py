@@ -67,9 +67,9 @@ class InstalingAPI:
             "version": self.VERSION_STRING
         }).json()
 
-        polish_word = answer_json["word"]
+        english_word = answer_json["word"]
 
-        return {"polish_word": polish_word}
+        return {"polish_word": english_word}
 
     def reveal_answer(self, word_id):
         # word_path = self.req_ses.get(f"https://instaling.pl/ling2/server/actions/getAudioUrl.php?id={word_id}").json()
