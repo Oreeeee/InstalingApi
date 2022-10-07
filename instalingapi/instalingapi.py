@@ -44,12 +44,10 @@ class InstalingAPI:
         }).json()["is_new"]
 
     def generate_next_word(self):
-        generate_word_non_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/generate_next_word.php", headers={"Content-Type": "application/x-www-form-urlencoded"}, data={
+        generate_word_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/generate_next_word.php", data={
             "child_id": self.instaling_id,
             "date": round(time.time()) * 1000
-        })
-        generate_word_json = generate_word_non_json.json()
-
+        }).json()
 
         try:
             word_id = generate_word_json["id"]
@@ -62,13 +60,12 @@ class InstalingAPI:
             raise SessionCompleteException
 
     def submit_answer(self, word_id, answer):
-        answer_non_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/save_answer.php/", headers={"Content-Type": "application/x-www-form-urlencoded"}, data={
+        answer_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/save_answer.php/", data={
             "child_id": self.instaling_id,
             "word_id": word_id,
             "answer": answer,
             "version": self.VERSION_STRING
-        })
-        answer_json = answer_non_json.json()
+        }).json()
 
         english_word = answer_json["word"]
 
