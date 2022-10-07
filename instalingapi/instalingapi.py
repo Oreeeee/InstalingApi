@@ -36,7 +36,7 @@ class InstalingAPI:
             self.password = password
 
     def is_session_new(self):
-        return self.req_ses.post("https://instaling.pl/ling2/server/actions/init_session.php", files={
+        return self.req_ses.post("https://instaling.pl/ling2/server/actions/init_session.php", data={
             "child_id": self.instaling_id,
             "repeat": "",
             "start": "",
@@ -44,7 +44,7 @@ class InstalingAPI:
         }).json()["is_new"]
 
     def generate_next_word(self):
-        generate_word_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/generate_next_word.php", files={
+        generate_word_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/generate_next_word.php", headers={"Content-Type": "application/x-www-form-urlencoded"}, data={
             "child_id": self.instaling_id,
             "date": round(time.time()) * 1000
         }).json()
@@ -60,7 +60,7 @@ class InstalingAPI:
             raise SessionCompleteException
 
     def submit_answer(self, word_id, answer):
-        answer_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/save_answer.php/", files={
+        answer_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/save_answer.php/", headers={"Content-Type": "application/x-www-form-urlencoded"}, data={
             "child_id": self.instaling_id,
             "word_id": word_id,
             "answer": answer,
