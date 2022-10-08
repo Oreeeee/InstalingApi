@@ -14,7 +14,7 @@ class InstalingAPI:
         self.req_ses = self.__initialize_requests_session()
 
     def log_in(self, username, password):
-        self.student_page = self.req_ses.post("https://instaling.pl/teacher.php?page=teacherActions/", data={
+        self.student_page = self.req_ses.post("https://instaling.pl/teacher.php?page=teacherActions", data={
             "action": "login",
             "from": "",
             "log_email": username,
@@ -60,7 +60,7 @@ class InstalingAPI:
             raise SessionCompleteException
 
     def submit_answer(self, word_id, answer):
-        answer_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/save_answer.php/", data={
+        answer_json = self.req_ses.post("https://instaling.pl/ling2/server/actions/save_answer.php", data={
             "child_id": self.instaling_id,
             "word_id": word_id,
             "answer": answer,
