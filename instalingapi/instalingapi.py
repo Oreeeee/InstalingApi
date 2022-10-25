@@ -26,8 +26,9 @@ class InstalingAPI:
 
         try:
             # Get user ID
-            self.instaling_id = BeautifulSoup(self.student_page.text).find(
-                "a", class_="btn_session").get("href")[-8:-1]
+            soup = BeautifulSoup(self.student_page.text)
+            id_button = soup.find("a", class_="btn_session")
+            self.instaling_id = id_button.get("href")[-8:-1]
         except IndexError:
             raise WrongPasswordException
         finally:
