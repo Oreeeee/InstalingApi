@@ -24,7 +24,7 @@ class InstalingAPI:
 
         # Get user ID
         self.instaling_id = BeautifulSoup(self.student_page.text).find_all(
-            "a", class_="btn_session").get("href")[-7:-1]
+            "a", class_="btn_session").get("href")[-8:-1]
 
         try:
             self.instaling_id = self.instaling_id[0].strip(
