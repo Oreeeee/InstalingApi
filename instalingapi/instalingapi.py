@@ -23,7 +23,7 @@ class InstalingAPI:
         })
 
         # Get user ID
-        self.instaling_id = BeautifulSoup(self.student_page.text).find_all(
+        self.instaling_id = BeautifulSoup(self.student_page.text).find(
             "a", class_="btn_session").get("href")[-8:-1]
 
         try:
