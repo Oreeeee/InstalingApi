@@ -22,13 +22,12 @@ class InstalingAPI:
             "log_password": password
         })
 
-        # Get user ID
-        self.instaling_id = BeautifulSoup(self.student_page.text).find(
-            "a", class_="btn_session").get("href")[-8:-1]
+        
 
         try:
-            self.instaling_id = self.instaling_id[0].strip(
-                "/ling2/html_app/app.php?child_id=")
+            # Get user ID
+            self.instaling_id = BeautifulSoup(self.student_page.text).find(
+                "a", class_="btn_session").get("href")[-8:-1]
         except IndexError:
             raise WrongPasswordException
         finally:
