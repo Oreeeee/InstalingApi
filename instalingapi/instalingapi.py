@@ -22,14 +22,12 @@ class InstalingAPI:
             "log_password": password
         })
 
-        
-
         try:
             # Get user ID
             soup = BeautifulSoup(self.student_page.text)
             id_button = soup.find("a", class_="btn-session")
-            print(id_button)
-            self.instaling_id = id_button.get("href")[-8:-1]
+            href_contents = id_button.get("href")
+            self.instaling_id = href_contents[len(href_contents) - 7:]
         except AttributeError:
             raise WrongPasswordException
         finally:
