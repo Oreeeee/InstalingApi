@@ -1,7 +1,7 @@
 from .instaling_exceptions import *
+from bs4 import BeautifulSoup
 import requests
 import time
-import re
 
 
 class InstalingAPI:
@@ -21,14 +21,13 @@ class InstalingAPI:
             "log_password": password
         })
 
-        # Get user ID
-        self.instaling_id = re.findall(
-            "\/ling2\/html_app\/app.php\?child_id=\d\d\d\d\d\d\d", self.student_page.text)
-
         try:
-            self.instaling_id = self.instaling_id[0].strip(
-                "/ling2/html_app/app.php?child_id=")
-        except IndexError:
+            # Get user ID
+            soup = BeautifulSoup(self.student_page.text)
+            id_button = soup.find("a", class_="btn-session")
+            href_contents = id_button.get("href")
+            self.instaling_id = href_contents[len(href_contents) - 7:]
+        except AttributeError:
             raise WrongPasswordException
         finally:
             # Set username and password as attributes
