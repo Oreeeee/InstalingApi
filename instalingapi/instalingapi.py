@@ -1,4 +1,5 @@
 from .instaling_exceptions import *
+from bs4 import BeautifulSoup
 import requests
 import time
 import re
@@ -22,8 +23,8 @@ class InstalingAPI:
         })
 
         # Get user ID
-        self.instaling_id = re.findall(
-            "\/ling2\/html_app\/app.php\?child_id=\d\d\d\d\d\d\d", self.student_page.text)
+        self.instaling_id = BeautifulSoup(self.student_page.text).find_all(
+            "a", class_="btn_session").get("href")[-7:-1]
 
         try:
             self.instaling_id = self.instaling_id[0].strip(
