@@ -27,7 +27,7 @@ class InstalingAPI:
         try:
             # Get user ID
             soup = BeautifulSoup(self.student_page.text)
-            id_button = soup.find_all("a", class_="btn-session")
+            id_button = soup.find("a", class_="btn-session")
             print(id_button)
             self.instaling_id = id_button.get("href")[-8:-1]
         except AttributeError:
