@@ -23,7 +23,7 @@ class InstalingAPI:
 
         try:
             # Get user ID
-            soup = BeautifulSoup(self.student_page.text)
+            soup = BeautifulSoup(self.student_page.text, "lxml")
             id_button = soup.find("a", class_="btn-session")
             href_contents = id_button.get("href")
             self.instaling_id = href_contents[len(href_contents) - 7:]
