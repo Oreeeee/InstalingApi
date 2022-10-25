@@ -2,7 +2,6 @@ from .instaling_exceptions import *
 from bs4 import BeautifulSoup
 import requests
 import time
-import re
 
 
 class InstalingAPI:
