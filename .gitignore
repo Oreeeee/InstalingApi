@@ -2,3 +2,5 @@
 __pycache__/
 .venv/
 initialize_class_test.py
+instalingapi.egg-info/
+build/

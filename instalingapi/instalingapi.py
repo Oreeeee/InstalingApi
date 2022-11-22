@@ -1,12 +1,13 @@
 from .instaling_exceptions import *
 from bs4 import BeautifulSoup
+import latest_user_agents
 import requests
 import time
 
 
 class InstalingAPI:
     def __init__(self):
-        self.USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"
+        self.USER_AGENT = latest_user_agents.get_latest_user_agents()[0]
         # TODO: Update this string automatically
         self.VERSION_STRING = "C65E24B29F60B1231EC23D979C9707D2"
 

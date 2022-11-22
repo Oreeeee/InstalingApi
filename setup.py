@@ -7,5 +7,5 @@ setup(
     license="Unlicense",
     author="Oreeeee",
     packages=["instalingapi"],
-    install_requires=["requests", "beautifulsoup4", "lxml"]
+    install_requires=["requests", "beautifulsoup4", "lxml", "latest-user-agents"]
 )
